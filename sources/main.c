@@ -43,8 +43,10 @@ int main(int ac, char **av, char **env)
 
   reservedMemoryLocation(fd);
   getHeaderInformations(fd, &gbHeader);
-  if (args.header == 1)
+  if (args.header == 1) {
     dumpHeader(&gbHeader);
+    fprintf(stdout, "-----------------------------------------------------------\n");
+  }
   if (emulates(fd, &gbHeader) == -1) {
     fprintf(stderr, "Something went wrong with the emulation\n");
     return (-1);
