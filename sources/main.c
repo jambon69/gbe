@@ -8,8 +8,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "emulate.h"
 #include "header.h"
 #include "args.h"
+#include "registers.h"
 
 /*
 ** USAGE if no arguments
@@ -37,11 +39,15 @@ int main(int ac, char **av, char **env)
   struct s_Args args;
   struct s_gbHeader gbHeader;
   parseArgs(&args, ac, av);
-  int fd = open(av[1], O_RDONLY);
+  FILE  *fd = fopen(av[1], "r");
 
   reservedMemoryLocation(fd);
   getHeaderInformations(fd, &gbHeader);
   if (args.header == 1)
     dumpHeader(&gbHeader);
+  if (emulates(fd, &gbHeader) == -1) {
+    fprintf(stderr, "Something went wrong with the emulation\n");
+    return (-1);
+  }
   return (0);
 }

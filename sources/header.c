@@ -53,12 +53,12 @@ void dumpHeader(struct s_gbHeader *gbHeader)
 /*
 ** Reads the RML (bytes 0x00 to 0x100) from the gameboy rom
 */
-int reservedMemoryLocation(int fd)
+int reservedMemoryLocation(FILE *fd)
 {
   unsigned char buffer[0x100];
   int sizeRead = 0;
 
-  if ((sizeRead = read(fd, buffer, 0x100)) == -1)
+  if ((sizeRead = fread(buffer, sizeof(unsigned char), 0x100, fd)) == -1)
     return (-1);
   /* DO SOMETHING WITH THESE INFOS */
   /* hexDumpBuffer(buffer, 0x100); */
@@ -66,58 +66,58 @@ int reservedMemoryLocation(int fd)
   return (0);
 }
 
-int getHeaderInformations(int fd, struct s_gbHeader *gbHeader)
+int getHeaderInformations(FILE *fd, struct s_gbHeader *gbHeader)
 {
   unsigned char buffer[256];
   int sizeRead = 0;
 
   /* Begin code execution point */
-  if ((sizeRead = read(fd, gbHeader->beginCode, 0x4)) == -1)
+  if ((sizeRead = fread(gbHeader->beginCode, sizeof(unsigned char), 0x4, fd)) == -1)
     return (-1);
 
   /* Nintendo graphic */
-  if ((sizeRead = read(fd, gbHeader->nintendo, 0x30)) == -1)
+  if ((sizeRead = fread(gbHeader->nintendo, sizeof(unsigned char), 0x30, fd)) == -1)
     return (-1);
 
   /* Title of the game */
-  if ((sizeRead = read(fd, gbHeader->title, 0xf)) == -1)
+  if ((sizeRead = fread(gbHeader->title, sizeof(unsigned char), 0xf, fd)) == -1)
     return (-1);
 
   /* Is the game for gameboy color or not */
-  if ((sizeRead = read(fd, gbHeader->color, 0x1)) == -1)
+  if ((sizeRead = fread(gbHeader->color, sizeof(unsigned char), 0x1, fd)) == -1)
     return (-1);
 
   /* Licensee code */
-  if ((sizeRead = read(fd, gbHeader->licensee, 0x2)) == -1)
+  if ((sizeRead = fread(gbHeader->licensee, sizeof(unsigned char), 0x2, fd)) == -1)
     return (-1);
 
   /* Gameboy or super gameboy ? */
-  if ((sizeRead = read(fd, gbHeader->superGB, 0x1)) == -1)
+  if ((sizeRead = fread(gbHeader->superGB, sizeof(unsigned char), 0x1, fd)) == -1)
     return (-1);
 
   /* Cartridge type */
-  if ((sizeRead = read(fd, gbHeader->cartridge, 0x1)) == -1)
+  if ((sizeRead = fread(gbHeader->cartridge, sizeof(unsigned char), 0x1, fd)) == -1)
     return (-1);
 
   /* Rom size */
-  if ((sizeRead = read(fd, gbHeader->rom, 0x1)) == -1)
+  if ((sizeRead = fread(gbHeader->rom, sizeof(unsigned char), 0x1, fd)) == -1)
     return (-1);
 
   /* Ram size */
-  if ((sizeRead = read(fd, gbHeader->ram, 0x1)) == -1)
+  if ((sizeRead = fread(gbHeader->ram, sizeof(unsigned char), 0x1, fd)) == -1)
     return (-1);
 
   /* Destination */
-  if ((sizeRead = read(fd, gbHeader->dest, 0x1)) == -1)
+  if ((sizeRead = fread(gbHeader->dest, sizeof(unsigned char), 0x1, fd)) == -1)
     return (-1);
 
   /* USELESS FOR US */
   /* SEE LATER */
-  if ((sizeRead = read(fd, buffer, 0x3)) == -1)
+  if ((sizeRead = fread(buffer, sizeof(unsigned char), 0x3, fd)) == -1)
     return (-1);
 
   /* Checksum */
-  if ((sizeRead = read(fd, gbHeader->checksum, 0x2)) == -1)
+  if ((sizeRead = fread(gbHeader->checksum, sizeof(unsigned char), 0x2, fd)) == -1)
     return (-1);
   return (0);  
 }

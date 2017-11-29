@@ -28,8 +28,8 @@ typedef struct s_gbHeader
 /*
 ** functions
 */
-int reservedMemoryLocation(int fd);
-int getHeaderInformations(int fd, struct s_gbHeader *);
+int reservedMemoryLocation(FILE *fd);
+int getHeaderInformations(FILE *fd, struct s_gbHeader *);
 void dumpHeader(struct s_gbHeader *);
 
 #endif

@@ -4,6 +4,7 @@ SRCS =  sources/main.c		\
 	sources/header.c	\
 	sources/utils.c		\
 	sources/args.c		\
+	sources/emulate.c	\
 
 OBJS = $(SRCS:.c=.o)
 
