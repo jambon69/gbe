@@ -6,6 +6,7 @@ SRCS =  sources/main.c		\
 	sources/args.c		\
 	sources/emulate.c	\
 	sources/machine.c	\
+	sources/registers.c	\
 
 OBJS = $(SRCS:.c=.o)
 

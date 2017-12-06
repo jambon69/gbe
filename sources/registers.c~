@@ -4,10 +4,7 @@
 ** Structure given by https://cturt.github.io/cinoop.html
 */
 
-#ifndef REGISTERS_H
-# define REGISTERS_H
-
-struct registers {
+extern struct registers {
   struct {
     union {
       struct {
@@ -50,10 +47,4 @@ struct registers {
 
   unsigned short sp;
   unsigned short pc;
-
-  unsigned short z_flag;
-};
-
-extern struct registers registers;
-
-#endif
+} registers;

@@ -9,6 +9,60 @@
 #include "registers.h"
 #include "utils.h"
 
+/* jump if zflag is reset */
+void jr_nz_n(FILE *fd, unsigned char *operands)
+{
+  /* z flag is reset */
+  if (registers.z_flag == 0) {
+    fseek(fd, operands[0], SEEK_CUR);
+  }
+}
+
+/* Decrement register b */
+void dec_b(FILE *fd, unsigned char *operands)
+{
+  (void)fd;
+  (void)operands;
+  --registers.b;
+}
+
+/* load a into hl */
+void ld_hl_a(FILE *fd, unsigned char *operands)
+{
+  (void)fd;
+  (void)operands;
+  registers.hl = registers.a;
+}
+
+/* load n into B register */
+void ld_b_n(FILE *fd, unsigned char *operands)
+{
+  (void)fd;
+  registers.b = operands[0];
+}
+
+/* load n into C register */
+void ld_c_n(FILE *fd, unsigned char *operands)
+{
+  (void)fd;
+  registers.c = operands[0];
+}
+
+/* ld nn into HL register */
+void ld_hl_nn(FILE *fd, unsigned char *operands)
+{
+  (void)fd;
+  registers.hl = operands[1] * 256 + operands[0];
+}
+
+/* xor a instruction */
+void xor_a(FILE *fd, unsigned char *operands)
+{
+  (void)fd;
+  (void)operands;
+  registers.a = registers.a ^ registers.a;
+}
+
 /* jp_nn instruction, jump to nn */
 void jp_nn(FILE *fd, unsigned char *operands)
 {

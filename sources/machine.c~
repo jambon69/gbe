@@ -11,8 +11,8 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0x02
   {NULL, 0, NULL}, // 0x03
   {NULL, 0, NULL}, // 0x04
-  {"DEC B", 0, dec_b}, // 0x05
-  {"LD B", 1, ld_b_n}, // 0x06
+  {NULL, 0, NULL}, // 0x05
+  {NULL, 0, NULL}, // 0x06
   {NULL, 0, NULL}, // 0x07
   {NULL, 0, NULL}, // 0x08
   {NULL, 0, NULL}, // 0x09
@@ -20,7 +20,7 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0x0b
   {NULL, 0, NULL}, // 0x0C
   {NULL, 0, NULL}, // 0x0d
-  {"LD C", 1, ld_c_n}, // 0x0e
+  {NULL, 0, NULL}, // 0x0e
   {NULL, 0, NULL}, // 0x0f
   {NULL, 0, NULL}, // 0x10
   {NULL, 0, NULL}, // 0x11
@@ -38,8 +38,8 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0x1d
   {NULL, 0, NULL}, // 0x1e
   {NULL, 0, NULL}, // 0x1f
-  {"JR NZ", 1, jr_nz_n}, // 0x20
-  {"LD HL", 2, ld_hl_nn}, // 0x21
+  {NULL, 0, NULL}, // 0x20
+  {NULL, 0, NULL}, // 0x21
   {NULL, 0, NULL}, // 0x22
   {NULL, 0, NULL}, // 0x23
   {NULL, 0, NULL}, // 0x24
@@ -56,7 +56,7 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0x2f
   {NULL, 0, NULL}, // 0x30
   {NULL, 0, NULL}, // 0x31
-  {"LDD HL A", 0, ld_hl_a}, // 0x32
+  {NULL, 0, NULL}, // 0x32
   {NULL, 0, NULL}, // 0x33
   {NULL, 0, NULL}, // 0x34
   {NULL, 0, NULL}, // 0x35
@@ -181,7 +181,7 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0xac
   {NULL, 0, NULL}, // 0xad
   {NULL, 0, NULL}, // 0xae
-  {"XOR A", 0, xor_a}, // 0xaf
+  {NULL, 0, NULL}, // 0xaf
   {NULL, 0, NULL}, // 0xb0
   {NULL, 0, NULL}, // 0xb1
   {NULL, 0, NULL}, // 0xb2
