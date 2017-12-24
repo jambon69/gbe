@@ -47,7 +47,7 @@ int main(int ac, char **av, char **env)
     dumpHeader(&gbHeader);
     fprintf(stdout, "-----------------------------------------------------------\n");
   }
-  if (emulates(fd, &gbHeader) == -1) {
+  if (emulates(fd, &gbHeader, args.debug) == -1) {
     fprintf(stderr, "Something went wrong with the emulation\n");
     return (-1);
   }

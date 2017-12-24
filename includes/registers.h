@@ -52,6 +52,7 @@ struct registers {
   unsigned short pc;
 
   unsigned short z_flag;
+  unsigned short c_flag;
 };
 
 extern struct registers registers;

@@ -19,7 +19,7 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0x0a
   {NULL, 0, NULL}, // 0x0b
   {NULL, 0, NULL}, // 0x0C
-  {NULL, 0, NULL}, // 0x0d
+  {"DEC C", 0, dec_c}, // 0x0d
   {"LD C", 1, ld_c_n}, // 0x0e
   {NULL, 0, NULL}, // 0x0f
   {NULL, 0, NULL}, // 0x10
@@ -55,7 +55,7 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0x2e
   {NULL, 0, NULL}, // 0x2f
   {NULL, 0, NULL}, // 0x30
-  {NULL, 0, NULL}, // 0x31
+  {"LD SP", 2, ld_sp_nn}, // 0x31
   {"LDD HL A", 0, ld_hl_a}, // 0x32
   {NULL, 0, NULL}, // 0x33
   {NULL, 0, NULL}, // 0x34
@@ -68,7 +68,7 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0x3b
   {NULL, 0, NULL}, // 0x3c
   {NULL, 0, NULL}, // 0x3d
-  {NULL, 0, NULL}, // 0x3e
+  {"LD A", 1, ld_a_n}, // 0x3e
   {NULL, 0, NULL}, // 0x3f
   {NULL, 0, NULL}, // 0x40
   {NULL, 0, NULL}, // 0x41
@@ -210,6 +210,7 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0xc9
   {NULL, 0, NULL}, // 0xca
   {NULL, 0, NULL}, // 0xcb
+  {NULL, 0, NULL}, // 0xcc
   {NULL, 0, NULL}, // 0xcd
   {NULL, 0, NULL}, // 0xce
   {NULL, 0, NULL}, // 0xcf
@@ -229,7 +230,7 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0xdd
   {NULL, 0, NULL}, // 0xde
   {NULL, 0, NULL}, // 0xdf
-  {NULL, 0, NULL}, // 0xe0
+  {"LDH xxx A", 1, ldh_n_a}, // 0xe0
   {NULL, 0, NULL}, // 0xe1
   {NULL, 0, NULL}, // 0xe2
   {NULL, 0, NULL}, // 0xe3
@@ -243,11 +244,12 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0xeb
   {NULL, 0, NULL}, // 0xec
   {NULL, 0, NULL}, // 0xed
+  {NULL, 0, NULL}, // 0xee
   {NULL, 0, NULL}, // 0xef
-  {NULL, 0, NULL}, // 0xf0
+  {"LDH A", 1, ldh_a_n}, // 0xf0
   {NULL, 0, NULL}, // 0xf1
   {NULL, 0, NULL}, // 0xf2
-  {NULL, 0, NULL}, // 0xf3
+  {"DI", 0, nop}, // 0xf3
   {NULL, 0, NULL}, // 0xf4
   {NULL, 0, NULL}, // 0xf5
   {NULL, 0, NULL}, // 0xf6
@@ -258,6 +260,6 @@ struct s_instructions instructions[256] = {
   {NULL, 0, NULL}, // 0xfb
   {NULL, 0, NULL}, // 0xfc
   {NULL, 0, NULL}, // 0xfd
-  {NULL, 0, NULL}, // 0xfe
+  {"CP A", 1, cp_a_n}, // 0xfe
   {NULL, 0, NULL} // 0xff
 };
