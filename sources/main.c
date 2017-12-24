@@ -23,7 +23,8 @@ void usage(char *prog)
 	  "\t%s file.gb [options]\n"
 	  "options : \n"
 	  "\t-h: Get Header informations\n"
-	  "\t-d: Launch debugger\n" , prog);
+	  "\t-d: Launch debugger\n"
+	  "\t-l: Log into file\n", prog);
 }
 
 /*
@@ -48,7 +49,7 @@ int main(int ac, char **av, char **env)
     dumpHeader(&gbHeader);
     fprintf(stdout, "-----------------------------------------------------------\n");
   }
-  if (emulates(fd, &gbHeader, args.debug) == -1) {
+  if (emulates(fd, &gbHeader, &args) == -1) {
     fprintf(stderr, "Something went wrong with the emulation\n");
     return (-1);
   }

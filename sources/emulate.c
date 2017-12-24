@@ -18,10 +18,42 @@ void fill_stack(FILE *fd)
   long save_fd = ftell(fd);
   char prog[0x7fff];
 
+  /* Fill program in ROM0/ROM1 section 0x0000 -> 0x7fff */
   fseek(fd, 0, SEEK_SET);
   fread(prog, sizeof(char), 0x7fff, fd);
-  
   memcpy(memory, prog, 0x7fff);
+
+  /* Fill VRA0 section 0x8000 -> 0x9ffff */
+  memset(memory + 0x7fff, 0x00, 0x1fff);
+
+  /* Fill SRA0 section 0xa000 -> 0xbfff */
+  memset(memory + 0xa000, 0xff, 0x1fff);
+
+  /* Fill WRA0 section 0xc000 -> 0xcfff */
+  memset(memory + 0xc000, 0x00, 0x0fff);
+
+  /* Fill WRA1 section 0xd000 -> 0xdfff */
+  memset(memory + 0xd000, 0x00, 0x0fff);
+
+  /* Fill ECH0 section 0xe000 -> 0xefff */
+  memset(memory + 0xe000, 0x00, 0x0fff);
+
+  /* Fill ECH1 section 0xf000 -> 0xfdff */
+  memset(memory + 0xf000, 0x00, 0x0dff);
+
+  /* Fill OAM section 0xfe00 -> 0xfe9a */
+  memset(memory + 0xfe00, 0x00, 0x009a);
+
+  /* Fill ---- section 0xfe9b -> 0xfeff */
+  memset(memory + 0xfe9b, 0x00, 0x0064);
+
+  /* Fill I/O section 0xff00 -> 0xff7f */
+  memset(memory + 0xff00, 0xff, 0x007f);
+
+  /* Fill HRAM section 0xff80 -> 0xffff */
+  memset(memory + 0xff80, 0x00, 0x007f);
+
+  /* hexDumpBuffer(memory, 0xffff); */
   fseek(fd, save_fd, SEEK_SET);
 }
 
@@ -35,7 +67,7 @@ void nop(FILE *fd, unsigned char *operands)
 /*
 ** Starting the state machine
 */
-int emulates(FILE *fd, struct s_gbHeader *headers, unsigned short debug)
+int emulates(FILE *fd, struct s_gbHeader *headers, struct s_Args *args)
 {
   (void)headers;
   unsigned char instruction = 0x00;
@@ -67,7 +99,9 @@ int emulates(FILE *fd, struct s_gbHeader *headers, unsigned short debug)
 
       /* Check if the instruction is known */
       if (instructions[instruction].disass == NULL) {
-      	/* fprintf(logFile, "UNKNOWN INSTRUCTION 0x%02x\n", instruction); */
+	if (args->log == 1) {
+	  fprintf(logFile, "UNKNOWN INSTRUCTION 0x%02x\n", instruction);
+	}
       	fprintf(stderr, "UNKNOWN INSTRUCTION 0x%02x\n", instruction);
       	return (-1);
       }
@@ -75,15 +109,17 @@ int emulates(FILE *fd, struct s_gbHeader *headers, unsigned short debug)
       /* Get the operands in the file (if needed) */
       fread(operands, sizeof(unsigned char), instructions[instruction].operandSize, fd);
 
-      /* /\* log the disassembly *\/ */
-      /* fprintf(logFile, "%s", instructions[instruction].disass); */
-      /* for (int i = 0; i < instructions[instruction].operandSize; ++i) { */
-      /* 	fprintf(logFile, " 0x%02x", operands[i]); */
-      /* } */
-      /* fprintf(logFile, "\n"); */
+      /* log the disassembly */
+      if (args->log == 1) {
+	fprintf(logFile, "%s", instructions[instruction].disass);
+	for (int i = 0; i < instructions[instruction].operandSize; ++i) {
+	  fprintf(logFile, " 0x%02x", operands[i]);
+	}
+	fprintf(logFile, "\n");
+      }
 
       /* Debugger */
-      if (debug == 1) {
+      if (args->debug == 1) {
 	aff_instructions(instruction, operands, fd);
       }
 

@@ -12,6 +12,7 @@ typedef struct s_Args
 {
   unsigned short header;
   unsigned short debug;
+  unsigned short log;
 } t_Args;
 
 /*

@@ -5,9 +5,11 @@
 #ifndef EMULATES_H
 #define EMULATES_H
 
+#include <stdio.h>
+
+#include "args.h"
 #include "header.h"
 #include "machine.h"
-#include <stdio.h>
 
 /*
 ** Structures
@@ -16,7 +18,7 @@
 /*
 ** Functions
 */
-int emulates(FILE *fd, struct s_gbHeader *headers, unsigned short debug);
+int emulates(FILE *fd, struct s_gbHeader *headers, struct s_Args *args);
 
 /* NOP */
 void nop(FILE *fd, unsigned char *operands);

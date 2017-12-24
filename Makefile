@@ -1,3 +1,6 @@
+# MAKEFILE FOR GAMEBOY EMULATOR
+# BY LOUIS GIESEN
+
 NAME = gbe
 
 SRCS =  sources/main.c		\
