@@ -12,6 +12,7 @@ SRCS =  sources/main.c		\
 	sources/load.c		\
 	sources/xor.c		\
 	sources/comp.c		\
+	sources/debugger.c	\
 
 OBJS = $(SRCS:.c=.o)
 

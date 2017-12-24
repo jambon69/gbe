@@ -1,5 +1,5 @@
 /*
-** Header file for emulates.c
+** Header file for emulates.c and all the assembly instructions
 */
 
 #ifndef EMULATES_H
