@@ -13,6 +13,18 @@
 
 unsigned char memory[0xffff];
 
+void fill_stack(FILE *fd)
+{
+  long save_fd = ftell(fd);
+  char prog[0x7fff];
+
+  fseek(fd, 0, SEEK_SET);
+  fread(prog, sizeof(char), 0x7fff, fd);
+  
+  memcpy(memory, prog, 0x7fff);
+  fseek(fd, save_fd, SEEK_SET);
+}
+
 /* nop instruction, does nothing */
 void nop(FILE *fd, unsigned char *operands)
 {
@@ -30,6 +42,9 @@ int emulates(FILE *fd, struct s_gbHeader *headers, unsigned short debug)
   FILE *logFile = fopen("disassembly.txt", "w+");
   unsigned char operands[2];
 
+  /* fill the stack */
+  fill_stack(fd);
+  
   /*
   ** Set the registers
   ** (MAY WANT TO DO THIS SOMEWHERE ELSE
@@ -50,12 +65,12 @@ int emulates(FILE *fd, struct s_gbHeader *headers, unsigned short debug)
       /* Read instruction from the gb file */
       fread(&instruction, sizeof(unsigned char), 0x1, fd);
 
-      /* /\* Check if the instruction is known *\/ */
-      /* if (instructions[instruction].disass == NULL) { */
-      /* 	fprintf(logFile, "UNKNOWN INSTRUCTION 0x%02x\n", instruction); */
-      /* 	fprintf(stderr, "UNKNOWN INSTRUCTION 0x%02x\n", instruction); */
-      /* 	return (-1); */
-      /* } */
+      /* Check if the instruction is known */
+      if (instructions[instruction].disass == NULL) {
+      	/* fprintf(logFile, "UNKNOWN INSTRUCTION 0x%02x\n", instruction); */
+      	fprintf(stderr, "UNKNOWN INSTRUCTION 0x%02x\n", instruction);
+      	return (-1);
+      }
 
       /* Get the operands in the file (if needed) */
       fread(operands, sizeof(unsigned char), instructions[instruction].operandSize, fd);

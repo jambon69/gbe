@@ -17,6 +17,8 @@
 ** Functions
 */
 int emulates(FILE *fd, struct s_gbHeader *headers, unsigned short debug);
+
+/* NOP */
 void nop(FILE *fd, unsigned char *operands);
 
 /* jump */

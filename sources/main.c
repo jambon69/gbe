@@ -22,7 +22,8 @@ void usage(char *prog)
 	  "USAGE : \n"
 	  "\t%s file.gb [options]\n"
 	  "options : \n"
-	  "\t-h: Get Header informations\n", prog);
+	  "\t-h: Get Header informations\n"
+	  "\t-d: Launch debugger\n" , prog);
 }
 
 /*

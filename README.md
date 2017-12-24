@@ -8,7 +8,8 @@ make
 ```
 
 # Options
-	- -h: See informations about the header of the gameboy file
+	-h: See informations about the header of the gameboy file
+	-d: Launch debugger
 
 # disassembly.txt
 Disassembly file of the last gameboy ROM
