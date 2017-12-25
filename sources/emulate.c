@@ -73,6 +73,13 @@ int emulates(FILE *fd, struct s_gbHeader *headers, struct s_Args *args)
   unsigned char instruction = 0x00;
   FILE *logFile = fopen("disassembly.txt", "w+");
   unsigned char operands[2];
+  long *breakpoints;
+  int block = 0;
+
+  /* fill breakpoint 0 at 0x100 (start of the program) */
+  if ((breakpoints = malloc(sizeof(long) * BREAKPOINTS)) == NULL)
+    return (-1);
+  breakpoints[0] = 0x0;
 
   /* fill the stack */
   fill_stack(fd);
@@ -89,6 +96,10 @@ int emulates(FILE *fd, struct s_gbHeader *headers, struct s_Args *args)
   ** SEEK_SET is the start of the file
   */
   fseek(fd, 0x100, SEEK_SET);
+  if (args->debug == 1) { 
+    /* As long as we chose breakpoints or print stack, we continue to ask */
+    while ((block = get_user_input(&breakpoints, fd)) == BREAK);
+  }
   while (1)
     {
       /* set pc at the new offset */
@@ -118,13 +129,28 @@ int emulates(FILE *fd, struct s_gbHeader *headers, struct s_Args *args)
 	fprintf(logFile, "\n");
       }
 
-      /* Debugger */
       if (args->debug == 1) {
-	aff_instructions(instruction, operands, fd);
+	if (block == BLOCK) {
+	  /* Debugger then ask for new instruction */
+	  aff_instructions(instruction, operands, fd);
+	  while ((block = get_user_input(&breakpoints, fd)) == BREAK);
+	}
+	else {
+	  /* check for breakpoints */
+	  for (long i = 1; i < breakpoints[0] + 1; ++i) {
+	    if (breakpoints[i] == registers.pc) {
+	      /* Debugger then ask for new instruction */
+	      aff_instructions(instruction, operands, fd);
+	      while ((block = get_user_input(&breakpoints, fd)) == BREAK);
+	      break ;
+	    }
+	  }
+	}
       }
 
       /* Call the corresponding function */
       instructions[instruction].funcptr(fd, operands);
     }
+  free(breakpoints);
   return (0);
 }

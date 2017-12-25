@@ -11,6 +11,8 @@
 #include "header.h"
 #include "machine.h"
 
+#define BREAKPOINTS 20
+
 /*
 ** Structures
 */

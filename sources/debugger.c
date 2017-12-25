@@ -5,18 +5,83 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#include "debugger.h"
+#include "emulate.h"
 #include "machine.h"
 #include "registers.h"
 
-static void get_five_next_instru(FILE *fd)
+#define DBG_USAGE "|s: print stack|n: next instruction|c: continue until next bp|b: add bp|d: disassembly|"
+#define DEBUG_OPTIONS 3
+
+/*
+** add breakpoint
+*/
+void add_breakpoint(char *follow, long **breakpoints)
+{
+  (*breakpoints)[0] = (*breakpoints)[0] + 1;
+  (*breakpoints)[(*breakpoints)[0]] = atol(follow);
+}
+
+/*
+** Special action following user input
+*/
+int get_user_input(long **breakpoints, FILE *fd)
+{
+  (void)fd;
+  char *buffer = NULL;
+  size_t len = 0;
+  int sread = 0;
+  static int ret_value = CONTINUE;
+
+  fprintf(stdout, "\n---------------------------------------------------------------------------------------\n");
+  fprintf(stdout, "%s\n", DBG_USAGE);
+  fprintf(stdout, "---------------------------------------------------------------------------------------\n");
+  fprintf(stdout, "-> ");
+  if ((sread = getline(&buffer, &len, stdin)) == -1) {
+    free(buffer);
+    return (-1);
+  }
+
+  buffer[sread - 1] = '\0'; // getline takes the '\n' into account
+
+  switch(buffer[0]) {
+  case 'c':
+    ret_value = CONTINUE;
+    break;
+  case 'n':
+    ret_value = BLOCK;
+    break;
+  case 'b':
+    ret_value = BREAK;
+    if (strlen(buffer) > 2) {
+      add_breakpoint(buffer + 2, breakpoints);
+    }
+    break;
+  case 'd':
+    ret_value = BREAK;
+    if (strlen(buffer) > 2) {
+      get_x_next_instru(fd, atoi(buffer + 2));
+    }
+    break;
+  }
+  free(buffer);
+  return (ret_value);
+}
+
+/*
+** Get the next X instructions (debugging purpose)
+** (gdb-style don't forget ;) )
+*/
+void get_x_next_instru(FILE *fd, int nb)
 {
   unsigned char instruction = 0x00;
   unsigned char operands[2];
   unsigned long save = ftell(fd);
   unsigned int fd_pos;
 
-  for (int k = 0; k < 5; ++k) {
+  for (int k = 0; k < nb; ++k) {
     /* Save pos of fd */
     fd_pos = (unsigned int)ftell(fd);
 
@@ -25,7 +90,7 @@ static void get_five_next_instru(FILE *fd)
 
     /* Check if the instruction is known */
     if (instructions[instruction].disass == NULL) {
-      fprintf(stdout, "UNKNOWN INSTRUCTION 0x%02x\n", instruction);
+      fprintf(stdout, "%04x|\tUNKNOWN INSTRUCTION 0x%02x\n", fd_pos, instruction);
       continue;
     }
 
@@ -85,10 +150,7 @@ int aff_instructions(unsigned char instruction, unsigned char operands[2], FILE 
   }
   fprintf(stdout, "\n");
   /* Get the five next instructions (debugging purpose) */
-  get_five_next_instru(fd);
+  get_x_next_instru(fd, 5);
   fprintf(stdout, "-------------------------------\n");
-
-  /* Returns something with return of getchar */
-  getchar();
   return (0);
 }

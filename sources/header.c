@@ -61,8 +61,6 @@ int reservedMemoryLocation(FILE *fd)
   if ((sizeRead = fread(buffer, sizeof(unsigned char), 0x100, fd)) == -1)
     return (-1);
   /* DO SOMETHING WITH THESE INFOS */
-  hexDumpBuffer(buffer, 0x100);
-  printf("\n---------------\n");
   return (0);
 }
 
