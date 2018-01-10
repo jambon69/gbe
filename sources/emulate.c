@@ -15,7 +15,6 @@ unsigned char memory[0xffff];
 
 void fill_stack(FILE *fd)
 {
-  long save_fd = ftell(fd);
   char prog[0x7fff];
 
   /* Fill program in ROM0/ROM1 section 0x0000 -> 0x7fff */
@@ -48,13 +47,42 @@ void fill_stack(FILE *fd)
   memset(memory + 0xfe9b, 0x00, 0x0064);
 
   /* Fill I/O section 0xff00 -> 0xff7f */
-  memset(memory + 0xff00, 0xff, 0x007f);
+  memset(memory + 0xff00, 0x00, 0x007f);
+  memory[0xff05] = 0x00; // TIMA
+  memory[0xff06] = 0x00; // TMA
+  memory[0xff07] = 0x00; // TAC
+  memory[0xff10] = 0x80; // NR10
+  memory[0xff11] = 0xbf; // NR11
+  memory[0xff12] = 0xf3; // NR12
+  memory[0xff14] = 0xbf; // NR14
+  memory[0xff16] = 0x3f; // NR21
+  memory[0xff17] = 0x00; // NR22
+  memory[0xff19] = 0xbf; // NR24
+  memory[0xff1a] = 0x7f; // NR30
+  memory[0xff1b] = 0xff; // NR31
+  memory[0xff1c] = 0x9f; // NR32
+  memory[0xff1e] = 0xbf; // NR33
+  memory[0xff20] = 0xff; // NR41
+  memory[0xff21] = 0x00; // NR42
+  memory[0xff22] = 0x00; // NR43
+  memory[0xff23] = 0xbf; // NR30
+  memory[0xff24] = 0x77; // NR50
+  memory[0xff25] = 0xf3; // NR51
+  memory[0xff26] = 0xf1; // NR52
+  memory[0xff40] = 0x91; // LCDC  -> LCD CONTROL
+  memory[0xff41] = 0x85; // STAT  -> LCD STATUS
+  memory[0xff42] = 0x00; // SCY   -> SCROLL Y
+  memory[0xff43] = 0x00; // SCX   -> SCROLL X
+  memory[0xff44] = 0x00; // LY  -> LCDC Y-COORDINATE
+  memory[0xff45] = 0x00; // LYC -> LY COMPARE
+  memory[0xff47] = 0xfc; // BGP
+  memory[0xff48] = 0xff; // OBP0
+  memory[0xff49] = 0xff; // OBP1
+  memory[0xff4a] = 0x00; // WY
+  memory[0xff4b] = 0x00; // WX
 
   /* Fill HRAM section 0xff80 -> 0xffff */
   memset(memory + 0xff80, 0x00, 0x007f);
-
-  /* hexDumpBuffer(memory, 0xffff); */
-  fseek(fd, save_fd, SEEK_SET);
 }
 
 /* nop instruction, does nothing */
@@ -87,9 +115,17 @@ int emulates(FILE *fd, struct s_gbHeader *headers, struct s_Args *args)
   /*
   ** Set the registers
   ** (MAY WANT TO DO THIS SOMEWHERE ELSE
-  */ 
+  */
+  /* if gameboy -> a = 0x01 */
+  registers.af = 0x01b0;
+  registers.bc = 0x0013;
+  registers.de = 0x00d8;
+  registers.hl = 0x014d;
   registers.z_flag = 1;
+  registers.n_flag = 0;
+  registers.h_flag = 0;
   registers.c_flag = 1;
+  registers.sp = 0xfffe;
 
   /*
   ** Call to fseek to get at position 0x100 which is the start of the program

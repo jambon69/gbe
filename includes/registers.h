@@ -51,8 +51,10 @@ struct registers {
   unsigned short sp;
   unsigned short pc;
 
-  unsigned short z_flag;
-  unsigned short c_flag;
+  unsigned short z_flag; // zero flag
+  unsigned short n_flag; // subtract flag
+  unsigned short h_flag; // half carry flag
+  unsigned short c_flag; // carry flag
 };
 
 extern struct registers registers;

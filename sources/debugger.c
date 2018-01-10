@@ -130,10 +130,15 @@ int aff_instructions(unsigned char instruction, unsigned char operands[2], FILE 
   fprintf(stdout, "HL: %02x%02x\n", registers.h, registers.l);
   fprintf(stdout, "SP: %04x\n", registers.sp);
   fprintf(stdout, "PC: %04x\n", registers.pc);
+  fprintf(stdout, "LCDC: %02x\n", memory[0xff40]);
+  fprintf(stdout, "STAT: %02x\n", memory[0xff41]);
+  fprintf(stdout, "IE: %02x\n", memory[0xffff]);
   fprintf(stdout, "-------------------------------\n");
   fprintf(stdout, "--------------FLAGS------------\n");
   fprintf(stdout, "-------------------------------\n");
   fprintf(stdout, "Z: %04x\n", registers.z_flag);
+  fprintf(stdout, "N: %04x\n", registers.n_flag);
+  fprintf(stdout, "H: %04x\n", registers.h_flag);
   fprintf(stdout, "C: %04x\n", registers.c_flag);
   fprintf(stdout, "-------------------------------\n");
 
