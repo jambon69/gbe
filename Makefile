@@ -19,7 +19,7 @@ SRCS =  sources/main.c		\
 
 OBJS = $(SRCS:.c=.o)
 
-CC = gcc
+CC = clang
 
 CPPFLAGS = -Wall -Wextra -Iincludes/
 

@@ -2,7 +2,7 @@
 ** Header file for debugger.c
 */
 
-#ifndef DEBBUGER_H
+#ifndef DEBUGGER_H
 #define DEBUGGER_H
 
 #define CONTINUE 0
